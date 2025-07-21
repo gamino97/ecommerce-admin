@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation';
 
 export default function SignOut() {
   const supabase = createClient();
-  function signOut() {
-    supabase.auth.signOut();
+  async function signOut() {
+    await supabase.auth.signOut();
     redirect('/login');
   }
   return <Button onClick={signOut}>Sign out</Button>;
