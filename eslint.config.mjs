@@ -20,52 +20,15 @@ const eslintConfig = [
     rules: {
       '@stylistic/indent': ['error', 2],
       '@stylistic/no-tabs': ['error'],
-      '@stylistic/max-len': ['error', { 'code': 80, 'ignoreStrings': true }],
+      '@stylistic/max-len': ['error', { 'code': 80, 'ignoreStrings': true, 'tabWidth': 2 }],
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/eol-last': ['error', 'always'],
       '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/no-multi-spaces': ['error'],
+      '@stylistic/curly-newline': ['error', { 'consistent': true }]
     }
   }
 ];
 
 export default eslintConfig;
-
-// module.exports = {
-//   env: {
-//     browser: true,
-//     es2021: true,
-//   },
-//   extends: [
-//     "eslint:recommended",
-//     "plugin:react/recommended",
-//     "plugin:react-hooks/recommended",
-//     "plugin:@typescript-eslint/recommended",
-//     "plugin:react/jsx-runtime",
-//     "plugin:@tanstack/eslint-plugin-query/recommended",
-//   ],
-//   overrides: [],
-//   parser: "@typescript-eslint/parser",
-//   parserOptions: {
-//     ecmaVersion: "latest",
-//     sourceType: "module",
-//   },
-//   plugins: ["react", "@typescript-eslint"],
-//   rules: {},
-// };
-// {
-//   plugins: {
-//     '@stylistic': stylistic
-//   },
-//   rules: {
-//     '@stylistic/indent': ['error', 2],
-//     '@stylistic/no-tabs': ['error'],
-//     '@stylistic/max-len': ['error', { 'code': 80, 'ignoreStrings': true }],
-//     '@stylistic/quotes': ['error', 'single'],
-//     '@stylistic/eol-last': ['error', 'always'],
-//     '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
-//     '@stylistic/semi': ['error', 'always'],
-//     '@stylistic/no-multi-spaces': ['error'],
-//   }
-// }

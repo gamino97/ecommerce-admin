@@ -17,22 +17,22 @@ import { SignOut } from '@/components/SignOut';
 const items = [
   {
     title: 'Dashboard',
-    url: '#',
+    url: '/dashboard',
     icon: Home,
   },
   {
     title: 'Products',
-    url: '#',
+    url: '/products',
     icon: Box,
   },
   {
     title: 'Orders',
-    url: '#',
+    url: '/orders',
     icon: ShoppingCart,
   },
   {
     title: 'Customers',
-    url: '#',
+    url: '/customers',
     icon: Users,
   }
 ];
@@ -42,7 +42,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>E-commerce Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
