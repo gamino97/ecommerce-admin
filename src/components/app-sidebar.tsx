@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { SignOut } from '@/components/SignOut';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 // Menu items.
 const items = [
@@ -62,6 +63,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <ThemeToggle />
             <SignOut />
           </SidebarMenuItem>
         </SidebarMenu>
