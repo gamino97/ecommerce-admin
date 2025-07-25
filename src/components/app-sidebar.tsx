@@ -1,5 +1,3 @@
-import { Box, Home, ShoppingCart, Users } from 'lucide-react';
-
 import {
   Sidebar,
   SidebarContent,
@@ -8,35 +6,11 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { SignOut } from '@/components/SignOut';
 import { ThemeToggle } from '@/components/ThemeToggle';
-
-// Menu items.
-const items = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: Home,
-  },
-  {
-    title: 'Products',
-    url: '/products',
-    icon: Box,
-  },
-  {
-    title: 'Orders',
-    url: '/orders',
-    icon: ShoppingCart,
-  },
-  {
-    title: 'Customers',
-    url: '/customers',
-    icon: Users,
-  }
-];
+import { AppSidebarMenuItem } from './app-sidebar-menu';
 
 export function AppSidebar() {
   return (
@@ -46,16 +20,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>E-commerce Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <AppSidebarMenuItem />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

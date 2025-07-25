@@ -1,6 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, ShoppingCart, Users, AlertTriangle, LucideIcon } from 'lucide-react';
 import { getTotalSalesPrice, countOrders, getCustomers, getLowStockItems } from '@/services/orders';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 // Utility function
 const formatCurrency = (value: number): string => {
