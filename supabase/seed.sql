@@ -14,8 +14,8 @@ insert into products (id, name, description, image_url, price, stock, category_i
 
 -- Insert orders
 insert into orders (id, user_id, total, status, shipping_address) values
-  ('30000000-0000-0000-0000-000000000001', '85fdbdb9-0352-4060-a7a2-8e88164d0a24', 115.49, 'pending', '123 Main St, Cityville'),
-  ('30000000-0000-0000-0000-000000000002', '85fdbdb9-0352-4060-a7a2-8e88164d0a24', 19.99, 'shipped', '456 Elm St, Townsville');
+  ('30000000-0000-0000-0000-000000000001', 'cb1b0137-d030-4932-a010-a3d4e0a3423e', 115.49, 'pending', '123 Main St, Cityville'),
+  ('30000000-0000-0000-0000-000000000002', 'cb1b0137-d030-4932-a010-a3d4e0a3423e', 19.99, 'shipped', '456 Elm St, Townsville');
 
 -- Insert order items
 insert into order_items (id, order_id, product_id, quantity, price) values

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "supabase:types": "supabase gen types typescript --project-id $PROJECT_ID > ./src/utils/supabase/database.types.ts"
+    "supabase:types": "supabase gen types typescript --project-id $PROJECT_ID > ./src/utils/supabase/database.types.ts",
+    "supabase": "supabase"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

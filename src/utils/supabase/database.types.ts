@@ -72,28 +72,36 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          profiles_id: string | null
           shipping_address: string | null
           status: string
           total: number
-          user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
+          profiles_id?: string | null
           shipping_address?: string | null
           status: string
           total: number
-          user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
+          profiles_id?: string | null
           shipping_address?: string | null
           status?: string
           total?: number
-          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_profiles_id_fkey"
+            columns: ["profiles_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {

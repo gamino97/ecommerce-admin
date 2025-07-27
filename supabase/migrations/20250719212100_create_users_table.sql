@@ -2,10 +2,16 @@
 create table public.profiles (
   id uuid not null references auth.users on delete cascade,
   first_name text,
-  last_name text
+  last_name text,
+  primary key (id)
 );
 
 alter table public.profiles enable row level security;
+
+create policy "Profiles are viewable by everyone"
+on profiles for select
+to authenticated, anon
+using ( true );
 
 -- inserts a row into public.profiles
 create function public.handle_new_user()
@@ -45,7 +51,7 @@ create table products (
 -- ORDERS TABLE
 create table orders (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id),
+  profiles_id uuid references profiles(id),
   total numeric(10,2) not null,
   status text not null check (status in ('pending', 'shipped', 'canceled')),
   shipping_address text,

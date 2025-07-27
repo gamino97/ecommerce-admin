@@ -4,8 +4,7 @@ const LOW_STOCK_THRESHOLD = 30;
 
 async function getOrders() {
   const supabase = await createClient();
-  const { data: orders } = await supabase.from('orders').select('*');
-
+  const { data: orders } = await supabase.from('orders').select('*, profiles(first_name, last_name), order_items(*)');
   return orders;
 }
 
