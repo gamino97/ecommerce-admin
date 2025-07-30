@@ -10,6 +10,8 @@ export async function getCustomers() {
       last_name,
       created_at
     `)
-    .order('created_at', { ascending: false });
-  return {data, error};
+    .order('created_at', { ascending: false })
+    .overrideTypes<Array<{ id: string }>>();
+  if (error) throw error;
+  return data;
 }

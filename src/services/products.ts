@@ -20,6 +20,10 @@ async function getProducts() {
     .from('products')
     .select('*, order_items(count)')
     .order('created_at', { ascending: false });
+  if (error) throw error;
+  return products || [];
+}
+
   if (error) {
     console.error('Error fetching products:', error);
     return [];
