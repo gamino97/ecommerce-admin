@@ -186,9 +186,6 @@ export default function NewOrderForm({
                             placeholder="Qty"
                             {...field}
                             min={1}
-                            // onChange={(e) =>
-                            //   field.onChange(parseInt(e.target.value, 10))
-                            // }
                           />
                         </FormControl>
                         <FormMessage />

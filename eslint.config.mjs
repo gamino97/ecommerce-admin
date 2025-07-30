@@ -26,7 +26,8 @@ const eslintConfig = [
       '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/no-multi-spaces': ['error'],
-      '@stylistic/curly-newline': ['error', { 'consistent': true }]
+      '@stylistic/curly-newline': ['error', { 'consistent': true }],
+      '@stylistic/object-curly-spacing': ['error', 'always']
     }
   }
 ];

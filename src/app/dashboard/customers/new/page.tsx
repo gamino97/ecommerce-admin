@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,10 +7,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { createCustomer } from './actions';
-import {Customer, schema} from '@/entities/customer';
+import { Customer, schema } from '@/entities/customer';
+import Link from 'next/link';
 
 export default function NewCustomerPage() {
-  const router = useRouter();
   const form = useForm<Customer>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -26,7 +25,7 @@ export default function NewCustomerPage() {
   } = form;
   const onSubmit: SubmitHandler<Customer> = async (data) => {
     try {
-      const {errors} = await createCustomer(data);
+      const { errors } = await createCustomer(data);
       if(errors) {
         Object.entries(errors).forEach(([key, value]) => {
           setError(key as keyof Customer, { message: value.message });
@@ -77,10 +76,12 @@ export default function NewCustomerPage() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => router.push('/dashboard/customers')}
+                asChild
                 disabled={isSubmitting}
               >
-                Cancel
+                <Link href="/dashboard/customers">
+                  Cancel
+                </Link>
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create'}

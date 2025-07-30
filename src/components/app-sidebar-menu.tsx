@@ -2,6 +2,7 @@
 import { SidebarMenuButton, SidebarMenuItem } from './ui/sidebar';
 import { usePathname } from 'next/navigation';
 import { Box, Home, ShoppingCart, Users } from 'lucide-react';
+import Link from 'next/link';
 
 // Menu items.
 const items = [
@@ -34,10 +35,10 @@ export function AppSidebarMenuItem() {
       {items.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild isActive={item.url === pathname}>
-            <a href={item.url}>
+            <Link href={item.url}>
               <item.icon />
               <span>{item.title}</span>
-            </a>
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
