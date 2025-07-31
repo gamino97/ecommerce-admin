@@ -34,7 +34,7 @@ import { createOrder } from './actions';
 import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
-import { getItemOrderSubtotal, getOrderTotal } from '@/lib/orders';
+import { getItemOrderSubtotal, getOrderTotal, getOrderTotalText } from '@/lib/orders';
 
 export default function NewOrderForm({
   customers,
@@ -285,15 +285,15 @@ function OrderTotal(
 ) {
   const items = useWatch({ name: 'items' }) as Order['items'];
   // Calculate order total
-  const orderTotal = useMemo(
-    () => getOrderTotal({ items, products }),
+  const orderTotalText = useMemo(
+    () => getOrderTotalText({ items, products }),
     [items, products]
   );
   return (
     <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
       <span className="font-medium mr-[1ch]">Order Total:</span>
       <span className="text-lg font-semibold">
-        {Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(orderTotal.toNumber())}
+        {orderTotalText}
       </span>
     </div>
   );

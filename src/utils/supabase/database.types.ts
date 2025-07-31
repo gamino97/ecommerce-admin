@@ -33,21 +33,18 @@ export type Database = {
         Row: {
           id: string
           order_id: string | null
-          price: number
           product_id: string | null
           quantity: number
         }
         Insert: {
           id?: string
           order_id?: string | null
-          price: number
           product_id?: string | null
           quantity: number
         }
         Update: {
           id?: string
           order_id?: string | null
-          price?: number
           product_id?: string | null
           quantity?: number
         }
@@ -75,7 +72,6 @@ export type Database = {
           profiles_id: string | null
           shipping_address: string | null
           status: string
-          total: number
         }
         Insert: {
           created_at?: string | null
@@ -83,7 +79,6 @@ export type Database = {
           profiles_id?: string | null
           shipping_address?: string | null
           status: string
-          total: number
         }
         Update: {
           created_at?: string | null
@@ -91,7 +86,6 @@ export type Database = {
           profiles_id?: string | null
           shipping_address?: string | null
           status?: string
-          total?: number
         }
         Relationships: [
           {

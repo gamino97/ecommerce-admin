@@ -2,6 +2,9 @@
 
 import { orderSchema, Order, type OrderStatus, orderStatuses } from '@/entities/order';
 import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
 type ActionState = {
   errors: Record<string, { message: string }>;
 };
@@ -23,14 +26,15 @@ export async function createOrder(data: Order) {
     shipping_address: 'Shipping Address',
   };
   const supabase = await createClient();
-  const { error } = await supabase.from('orders').insert(values);
-  if(error) {
-    return {
-      errors: {
-        customerId: { message: error.message },
-      },
-    };
-  }
-  console.log('Creating order:', data);
-  return { errors: null };
+  const { error, data: newOrder } = await supabase.from('orders').insert(values).select().single();
+  if(error) throw error;
+  const { error: insertError } = await supabase.from('order_items').insert(
+    data.items.map(item => ({
+      order_id: newOrder.id,
+      product_id: item.productId,
+      quantity: item.quantity,
+    })));
+  if(insertError) throw insertError;
+  revalidatePath('/dashboard/orders', 'page');
+  redirect('/dashboard/orders');
 }
