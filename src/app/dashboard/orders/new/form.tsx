@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Control, useController, useWatch } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,7 +35,7 @@ import { createOrder } from './actions';
 import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
-import { getItemOrderSubtotal } from '@/utils/orders';
+import { getItemOrderSubtotal, getOrderTotal } from '@/utils/orders';
 
 export default function NewOrderForm({
   customers,
@@ -137,7 +137,6 @@ export default function NewOrderForm({
               </FormItem>
             )}
           />
-
           <div>
             <h3 className="text-lg font-medium">Order Items</h3>
             <div className="space-y-4 mt-2">
@@ -207,20 +206,6 @@ export default function NewOrderForm({
                 </div>
               ))}
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="mt-2"
-              onClick={() =>
-                append({
-                  productId: '',
-                  productName: '',
-                  quantity: 1,
-                })
-              }
-            >
-              Add Item
-            </Button>
             <FormField
               control={control}
               name="items"
@@ -228,9 +213,25 @@ export default function NewOrderForm({
                 <FormMessage className='mt-2' />
               )}
             />
+            <div className="flex justify-between items-start mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  append({
+                    productId: '',
+                    productName: '',
+                    quantity: 1,
+                  })
+                }
+              >
+                Add Item
+              </Button>
+              <OrderTotal products={products}/>
+            </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex justify-between items-end">
           <Button
             type="button"
             variant="outline"
@@ -239,7 +240,6 @@ export default function NewOrderForm({
           >
             <Link href="/dashboard/orders">Cancel</Link>
           </Button>
-
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Creating...' : 'Create Order'}
           </Button>
@@ -279,7 +279,7 @@ function PriceField({
       field.onChange(getItemOrderSubtotal({
         product: selectedProduct,
         quantity: selectedQuantity
-      }));
+      }).toNumber());
     }
   }, [selectedProductId, field, selectedProduct, selectedQuantity]);
 
@@ -290,12 +290,31 @@ function PriceField({
           type="number"
           placeholder="Price"
           {...field}
-          value={field.value}
+          value={field.value || ''}
           readOnly
           className="bg-muted"
         />
       </FormControl>
       <FormMessage />
     </FormItem>
+  );
+}
+
+function OrderTotal(
+  { products }:{ products: Awaited<ReturnType<typeof getProducts>> }
+) {
+  const items = useWatch({ name: 'items' }) as Order['items'];
+  // Calculate order total
+  const orderTotal = useMemo(
+    () => getOrderTotal({ items, products }),
+    [items, products]
+  );
+  return (
+    <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
+      <span className="font-medium mr-[1ch]">Order Total:</span>
+      <span className="text-lg font-semibold">
+        {Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(orderTotal.toNumber())}
+      </span>
+    </div>
   );
 }
