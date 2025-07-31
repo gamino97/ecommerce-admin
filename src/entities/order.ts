@@ -2,10 +2,8 @@ import { z } from 'zod';
 
 export const orderStatuses = [
   'pending',
-  'processing',
   'shipped',
-  'delivered',
-  'cancelled',
+  'canceled',
 ] as const;
 
 export type OrderStatus = typeof orderStatuses[number];
@@ -21,14 +19,13 @@ export const orderItemSchema = z.object({
 export type OrderItem = z.infer<typeof orderItemSchema>;
 
 export const orderSchema = z.object({
-  customerId: z.string({error: 'Customer is required'}),
+  customerId: z.string({ error: 'Customer is required' }),
   status: z.enum(orderStatuses, {
     error: 'Status is required',
   }),
   items: z
     .array(orderItemSchema)
     .min(1, 'At least one item is required'),
-  notes: z.string().optional(),
 });
 
 export type Order = z.infer<typeof orderSchema>;

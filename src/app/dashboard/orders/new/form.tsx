@@ -28,14 +28,13 @@ import {
   Order,
   orderSchema,
   defaultOrderValues,
-  orderStatuses,
 } from '@/entities/order';
 import { Product } from '@/entities/product';
 import { createOrder } from './actions';
 import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
-import { getItemOrderSubtotal, getOrderTotal } from '@/utils/orders';
+import { getItemOrderSubtotal, getOrderTotal } from '@/lib/orders';
 
 export default function NewOrderForm({
   customers,
@@ -110,33 +109,6 @@ export default function NewOrderForm({
               </FormItem>
             )}
           />
-          <FormField
-            control={control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {orderStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div>
             <h3 className="text-lg font-medium">Order Items</h3>
             <div className="space-y-4 mt-2">
@@ -184,6 +156,9 @@ export default function NewOrderForm({
                             type="number"
                             placeholder="Qty"
                             {...field}
+                            onChange={(event) => field.onChange(
+                              event.target.valueAsNumber
+                            )}
                             min={1}
                           />
                         </FormControl>
@@ -286,14 +261,19 @@ function PriceField({
   return (
     <FormItem>
       <FormControl>
-        <Input
-          type="number"
-          placeholder="Price"
-          {...field}
-          value={field.value || ''}
-          readOnly
-          className="bg-muted"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <span className="text-muted-foreground">$</span>
+          </div>
+          <Input
+            type="number"
+            placeholder="Price"
+            {...field}
+            value={field.value || ''}
+            readOnly
+            className="bg-muted pl-7"
+          />
+        </div>
       </FormControl>
       <FormMessage />
     </FormItem>

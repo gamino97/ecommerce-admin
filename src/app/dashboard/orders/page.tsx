@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { getOrders } from '@/services/orders';
+import { getOrderTotalText } from '@/lib/orders';
 
 export const metadata = {
   title: 'Orders',
@@ -60,7 +61,7 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
               {order.order_items?.length || 0} item
               {order.order_items?.length !== 1 ? 's' : ''}
             </TableCell>
-            <TableCell>${order.total.toFixed(2)}</TableCell>
+            <TableCell>{getOrderTotalText({ items: order.order_items, products: order.order_items?.map(item => item.products) })}</TableCell>
             <TableCell>
               <Badge variant={getStatusBadgeVariant(order.status)}>
                 {order.status}
