@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  {files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}']},
+  { files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}'] },
   {
     plugins: {
       '@stylistic': stylistic
@@ -27,7 +27,8 @@ const eslintConfig = [
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/no-multi-spaces': ['error'],
       '@stylistic/curly-newline': ['error', { 'consistent': true }],
-      '@stylistic/object-curly-spacing': ['error', 'always']
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/no-trailing-spaces': ['error'],
     }
   }
 ];
