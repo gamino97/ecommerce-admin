@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useMemo } from 'react';
-import { Control, useController, useWatch } from 'react-hook-form';
+import { useMemo } from 'react';
+import { Control, useWatch } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -34,7 +34,7 @@ import { createOrder } from './actions';
 import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
-import { getItemOrderSubtotal, getOrderTotal, getOrderTotalText } from '@/lib/orders';
+import { getItemOrderSubtotal, getOrderTotalText } from '@/lib/orders';
 
 export default function NewOrderForm({
   customers,
@@ -119,7 +119,7 @@ export default function NewOrderForm({
                 >
                   <FormField
                     control={control}
-                    name={`items.${index}.productId`}
+                    name={`items.${index}.product_id`}
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <Select
@@ -194,8 +194,7 @@ export default function NewOrderForm({
                 variant="outline"
                 onClick={() =>
                   append({
-                    productId: '',
-                    productName: '',
+                    product_id: '',
                     quantity: 1,
                   })
                 }
@@ -235,28 +234,17 @@ function PriceField({
 }) {
   const selectedProductId = useWatch({
     control,
-    name: `items.${index}.productId`,
+    name: `items.${index}.product_id`,
   });
   const selectedQuantity = useWatch({
     control,
     name: `items.${index}.quantity`,
   });
-  
   const selectedProduct = products.find(p => p.id === selectedProductId);
-  const { field } = useController({
-    control,
-    name: `items.${index}.price`,
-  });
-
-  // Update the price when product changes
-  useEffect(() => {
-    if (selectedProduct) {
-      field.onChange(getItemOrderSubtotal({
-        product: selectedProduct,
-        quantity: selectedQuantity
-      }).toNumber());
-    }
-  }, [selectedProductId, field, selectedProduct, selectedQuantity]);
+  const price = selectedProduct ? getItemOrderSubtotal({
+    product: selectedProduct,
+    quantity: selectedQuantity
+  }).toNumber() : '';
 
   return (
     <FormItem>
@@ -268,8 +256,7 @@ function PriceField({
           <Input
             type="number"
             placeholder="Price"
-            {...field}
-            value={field.value || ''}
+            value={price}
             readOnly
             className="bg-muted pl-7"
           />

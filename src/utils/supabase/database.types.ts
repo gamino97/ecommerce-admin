@@ -33,19 +33,19 @@ export type Database = {
         Row: {
           id: string
           order_id: string | null
-          product_id: string | null
+          product_id: string
           quantity: number
         }
         Insert: {
           id?: string
           order_id?: string | null
-          product_id?: string | null
+          product_id: string
           quantity: number
         }
         Update: {
           id?: string
           order_id?: string | null
-          product_id?: string | null
+          product_id?: string
           quantity?: number
         }
         Relationships: [

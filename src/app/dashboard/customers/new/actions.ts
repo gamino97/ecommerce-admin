@@ -10,7 +10,7 @@ type ActionState = {
 };
 
 async function createCustomer(data: Customer): Promise<ActionState> {
-  const {error: parseError} = schema.safeParse(data);
+  const { error: parseError } = schema.safeParse(data);
   const errors: ActionState['errors'] = {};
   for (const { path, message } of parseError?.issues || []) {
     errors[path.join('.')] = { message };

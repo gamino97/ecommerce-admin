@@ -52,7 +52,6 @@ create table products (
 create table orders (
   id uuid primary key default gen_random_uuid(),
   profiles_id uuid references profiles(id),
-  total numeric(10,2) not null,
   status text not null check (status in ('pending', 'shipped', 'canceled')),
   shipping_address text,
   created_at timestamp with time zone default timezone('utc', now())
@@ -61,8 +60,7 @@ create table orders (
 -- ORDER ITEMS TABLE
 create table order_items (
   id uuid primary key default gen_random_uuid(),
-  order_id uuid references orders(id) on delete cascade,
-  product_id uuid references products(id),
+  order_id uuid not null references orders(id) on delete cascade,
+  product_id uuid not null references products(id),
   quantity integer not null,
-  price numeric(10,2) not null
 );

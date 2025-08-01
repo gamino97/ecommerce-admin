@@ -1,34 +1,39 @@
 import { createClient } from '@/utils/supabase/server';
+import { getOrderTotal } from '@/lib/orders';
+import Decimal from 'decimal.js';
+import { ArrayElement } from '@/entities';
 
 const LOW_STOCK_THRESHOLD = 30;
 
-async function getOrders() {
+export async function getOrders() {
   const supabase = await createClient();
   const { data: orders } = await supabase.from('orders').select('*, profiles(first_name, last_name), order_items(*, products(*))');
   return orders || [];
 }
 
-async function countOrders(): Promise<number> {
+export type OrderWithProfilesAndItems =
+  ArrayElement<Awaited<ReturnType<typeof getOrders>>>;
+
+export async function countOrders(): Promise<number> {
   const supabase = await createClient();
   const { count } = await supabase.from('orders').select('*', { count: 'exact' });
 
   return count || 0;
 }
 
-async function getTotalSalesPrice(): Promise<number> {
+export async function getTotalSalesPrice(): Promise<number> {
   const supabase = await createClient();
-  const { data } = await supabase.from('orders').select('order_items(*)');
+  const { data } = await supabase.from('orders').select('order_items(*, products(*))');
   const totalSalesPrice = data?.reduce(
-    (total, order) => total + order.order_items.reduce(
-      (itemTotal, item) => itemTotal + item.price * item.quantity,
-      0
-    ),
-    0
-  ) || 0;
-  return totalSalesPrice;
+    (total, order) => Decimal(total).add(getOrderTotal({
+      items: order.order_items
+    })),
+    Decimal(0)
+  ) || Decimal(0);
+  return totalSalesPrice.toNumber();
 }
 
-async function getLowStockItems(): Promise<number> {
+export async function getLowStockItems(): Promise<number> {
   const supabase = await createClient();
   const { data } = await supabase.from('products').select('*');
   const lowStockItems = data?.filter(
@@ -36,16 +41,8 @@ async function getLowStockItems(): Promise<number> {
   return lowStockItems;
 }
 
-async function getCustomers(): Promise<number> {
+export async function getCustomers(): Promise<number> {
   const supabase = await createClient();
   const { count } = await supabase.from('profiles').select('*', { count: 'exact' });
   return count || 0;
 }
-
-export {
-  getOrders,
-  countOrders,
-  getTotalSalesPrice,
-  getLowStockItems,
-  getCustomers
-};

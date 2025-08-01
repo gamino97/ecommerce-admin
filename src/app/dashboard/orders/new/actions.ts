@@ -1,6 +1,6 @@
 'use server';
 
-import { orderSchema, Order, type OrderStatus, orderStatuses } from '@/entities/order';
+import { orderSchema, Order, orderStatuses } from '@/entities/order';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -31,7 +31,7 @@ export async function createOrder(data: Order) {
   const { error: insertError } = await supabase.from('order_items').insert(
     data.items.map(item => ({
       order_id: newOrder.id,
-      product_id: item.productId,
+      product_id: item.product_id,
       quantity: item.quantity,
     })));
   if(insertError) throw insertError;

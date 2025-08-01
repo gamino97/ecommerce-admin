@@ -61,7 +61,9 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
               {order.order_items?.length || 0} item
               {order.order_items?.length !== 1 ? 's' : ''}
             </TableCell>
-            <TableCell>{getOrderTotalText({ items: order.order_items, products: order.order_items?.map(item => item.products) })}</TableCell>
+            <TableCell>
+              {getOrderTotalText({ items: order.order_items })}
+            </TableCell>
             <TableCell>
               <Badge variant={getStatusBadgeVariant(order.status)}>
                 {order.status}
@@ -82,7 +84,7 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
 export default async function OrdersPage() {
   const orders = await getOrders();
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full mx-auto py-10 px-5">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Orders</h1>

@@ -1,4 +1,6 @@
+import { OrderWithProfilesAndItems } from '@/services/orders';
 import { z } from 'zod';
+import { ArrayElement, Optional } from '.';
 
 export const orderStatuses = [
   'pending',
@@ -10,10 +12,8 @@ export type OrderStatus = typeof orderStatuses[number];
 
 export const orderItemSchema = z.object({
   id: z.string().optional(),
-  productId: z.string().min(1, 'Product is required'),
-  productName: z.string().optional(),
+  product_id: z.string().min(1, 'Product is required'),
   quantity: z.number().int().positive('Quantity must be at least 1'),
-  price: z.number().positive('Price must be greater than 0').optional(),
 });
 
 export type OrderItem = z.infer<typeof orderItemSchema>;
@@ -34,3 +34,7 @@ export const defaultOrderValues: Partial<Order> = {
   status: 'pending',
   items: [],
 };
+
+type OrderItems = ArrayElement<OrderWithProfilesAndItems['order_items']>;
+
+export type OrderItemPreview = Optional<Pick<OrderItems, 'product_id' | 'quantity' | 'products'>, 'products'>;
