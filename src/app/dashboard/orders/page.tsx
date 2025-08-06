@@ -34,10 +34,9 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Order ID</TableHead>
+          <TableHead>Order #</TableHead>
           <TableHead>Customer</TableHead>
           <TableHead>Date</TableHead>
-          <TableHead>Items</TableHead>
           <TableHead>Total</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="w-24">Actions</TableHead>
@@ -47,7 +46,7 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
         {data.map((order) => (
           <TableRow key={order.id}>
             <TableCell className="font-mono text-sm">
-              {order.id}
+              {order.order_number}
             </TableCell>
             <TableCell>
               {order.profiles?.first_name} {order.profiles?.last_name}
@@ -56,10 +55,6 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
               {order.created_at
                 ? new Date(order.created_at).toLocaleDateString()
                 : 'N/A'}
-            </TableCell>
-            <TableCell>
-              {order.order_items?.length || 0} item
-              {order.order_items?.length !== 1 ? 's' : ''}
             </TableCell>
             <TableCell>
               {getOrderTotalText({ items: order.order_items })}

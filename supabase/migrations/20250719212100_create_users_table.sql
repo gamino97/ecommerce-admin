@@ -54,6 +54,7 @@ create table orders (
   profiles_id uuid references profiles(id),
   status text not null check (status in ('pending', 'shipped', 'canceled')),
   shipping_address text,
+  order_number BIGSERIAL NOT NULL,
   created_at timestamp with time zone default timezone('utc', now())
 );
 
@@ -64,3 +65,13 @@ create table order_items (
   product_id uuid not null references products(id),
   quantity integer not null,
 );
+
+
+-- Create a view to show users who have placed at least one order
+create or replace view public.users_with_orders as
+select distinct u.id, u.created_at, p.first_name, p.last_name
+from auth.users u
+join public.profiles p on u.id = p.id;
+
+-- Add a comment to document the view
+comment on view public.users_with_orders is 'Users who have placed at least one order';

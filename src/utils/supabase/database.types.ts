@@ -69,6 +69,7 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          order_number: number
           profiles_id: string | null
           shipping_address: string | null
           status: string
@@ -76,6 +77,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: string
+          order_number?: number
           profiles_id?: string | null
           shipping_address?: string | null
           status: string
@@ -83,6 +85,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
+          order_number?: number
           profiles_id?: string | null
           shipping_address?: string | null
           status?: string
