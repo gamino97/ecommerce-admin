@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getProducts } from '@/services/products';
+import Image from 'next/image';
 
 export const metadata = {
   title: 'Products',
@@ -25,17 +26,26 @@ function DataTable({ data }: DataTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Name</TableHead>
+          <TableHead>Image</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Price</TableHead>
           <TableHead>Stock</TableHead>
           <TableHead>Sold</TableHead>
-          <TableHead className="">Actions</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map((product) => (
           <TableRow key={product.id}>
+            <TableCell className="w-16">
+              <Image
+                src={product.image_url}
+                alt={product.name}
+                width={44}
+                height={44}
+              />
+            </TableCell>
             <TableCell className="font-medium">{product.name}</TableCell>
             <TableCell>{product.description}</TableCell>
             <TableCell>{product.price}</TableCell>
@@ -46,8 +56,11 @@ function DataTable({ data }: DataTableProps) {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                asChild
               >
-                <Edit className="h-4 w-4" />
+                <Link href={`/dashboard/products/${product.id}/edit`}>
+                  <Edit className="h-4 w-4" />
+                </Link>
               </Button>
             </TableCell>
           </TableRow>

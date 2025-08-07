@@ -102,31 +102,31 @@ export type Database = {
       }
       products: {
         Row: {
-          category_id: string | null
+          category_id: string
           created_at: string | null
-          description: string | null
+          description: string
           id: string
-          image_url: string | null
+          image_url: string
           name: string
           price: number
           stock: number
         }
         Insert: {
-          category_id?: string | null
+          category_id: string
           created_at?: string | null
-          description?: string | null
+          description?: string
           id?: string
-          image_url?: string | null
+          image_url?: string
           name: string
           price: number
           stock?: number
         }
         Update: {
-          category_id?: string | null
+          category_id?: string
           created_at?: string | null
-          description?: string | null
+          description?: string
           id?: string
-          image_url?: string | null
+          image_url?: string
           name?: string
           price?: number
           stock?: number

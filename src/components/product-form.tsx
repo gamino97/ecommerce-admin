@@ -35,14 +35,12 @@ interface ProductFormProps {
   initialValues?: Partial<ProductInsert>;
   categories: Category[];
   onSubmit: (values: ProductInsert) => Promise<void>;
-  submitting?: boolean;
 }
 
 export function ProductForm({
   initialValues,
   categories,
   onSubmit,
-  submitting = false,
 }: ProductFormProps) {
   const form = useForm<ProductInsert>({
     resolver: zodResolver(productInsertSchema),
@@ -51,14 +49,12 @@ export function ProductForm({
       ...initialValues,
     },
   });
-
   const handleSubmit = useCallback(
     async (data: ProductInsert) => {
       await onSubmit(data);
     },
     [onSubmit],
   );
-
   const { control, formState } = form;
   return (
     <Form {...form}>
@@ -180,8 +176,8 @@ export function ProductForm({
           />
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button type="submit" disabled={submitting || formState.isSubmitting}>
-            {submitting || formState.isSubmitting ? 'Saving...' : 'Save'}
+          <Button type="submit" disabled={formState.isSubmitting}>
+            {formState.isSubmitting ? 'Saving...' : 'Save'}
           </Button>
         </CardFooter>
       </form>

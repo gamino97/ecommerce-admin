@@ -23,19 +23,17 @@ export async function getProducts() {
   return products || [];
 }
 
-export async function getProductById(id: string): Promise<Product | null> {
+export async function getProductById(id: string) {
   const supabase = await createClient();
   const { data: product, error } = await supabase
     .from('products')
     .select('*')
     .eq('id', id)
     .single();
-
   if (error) {
     console.error(`Error fetching product with id ${id}:`, error);
     return null;
   }
-
   return product;
 }
 
@@ -46,17 +44,14 @@ export async function createProduct(product: ProductInsert) {
     .insert([product])
     .select()
     .single();
-  if (error) {
-    console.error('Error creating product:', error);
-    return null;
-  }
+  if (error) throw error;
   return data;
 }
 
 export async function updateProduct(
   id: string,
   updates: Partial<ProductInsert>
-): Promise<Product | null> {
+) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('products')
@@ -64,24 +59,6 @@ export async function updateProduct(
     .eq('id', id)
     .select()
     .single();
-
-  if (error) {
-    console.error(`Error updating product with id ${id}:`, error);
-    return null;
-  }
-
+  if (error) throw error;
   return data;
-}
-
-export async function deleteProduct(id: string): Promise<boolean> {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from('products')
-    .delete()
-    .eq('id', id);
-  if (error) {
-    console.error(`Error deleting product with id ${id}:`, error);
-    return false;
-  }
-  return true;
 }
