@@ -17,7 +17,7 @@ export const metadata = {
 };
 
 interface DataTableProps {
-  data: Awaited<ReturnType<typeof getCustomers>>['data'];
+  data: Awaited<ReturnType<typeof getCustomers>>;
 }
 
 function DataTable({ data }: DataTableProps) {
@@ -31,7 +31,7 @@ function DataTable({ data }: DataTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data!.map((customer) => (
+        {data.map((customer) => (
           <TableRow key={customer.id}>
             <TableCell className="font-medium">
               {customer.id}
@@ -50,10 +50,9 @@ function DataTable({ data }: DataTableProps) {
 }
 
 export default async function CustomersPage() {
-  const {data:customers} = await getCustomers();
-  
+  const customers = await getCustomers();
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full mx-auto py-10 px-5">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Customers</h1>
