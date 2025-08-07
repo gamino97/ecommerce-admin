@@ -42,9 +42,9 @@ function DataTable({ data }: DataTableProps) {
             <TableCell>{product.stock}</TableCell>
             <TableCell>{product.order_items[0].count}</TableCell>
             <TableCell className="w-24">
-              <Button 
-                variant="outline" 
-                size="icon" 
+              <Button
+                variant="outline"
+                size="icon"
                 className="h-8 w-8"
               >
                 <Edit className="h-4 w-4" />
@@ -60,7 +60,7 @@ function DataTable({ data }: DataTableProps) {
 export default async function ProductsPage() {
   const products = await getProducts();
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full mx-auto py-10 px-5">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Products</h1>
