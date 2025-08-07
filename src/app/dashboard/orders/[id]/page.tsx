@@ -13,21 +13,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { getOrder } from '@/services/orders';
 import { getOrderTotalText } from '@/lib/orders';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getFullName } from '@/services/customers';
+import { StatusBadge } from '@/components/status-badge';
 
 export const metadata = {
   title: 'Order Details',
   description: 'View order information',
 };
-
-function OrderStatus({ status }: { status: string }) {
-  return <Badge>{status}</Badge>;
-}
 
 export default async function OrderPage(
   { params }: { params: Promise<{ id: string }> },
@@ -58,7 +54,7 @@ export default async function OrderPage(
               <h3 className="text-sm font-medium text-muted-foreground">
                 Status
               </h3>
-              <OrderStatus status={order.status} />
+              <StatusBadge status={order.status} />
             </div>
             <div>
               <h3 className="text-sm font-medium text-muted-foreground">

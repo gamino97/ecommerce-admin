@@ -9,25 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { getOrders } from '@/services/orders';
 import { getOrderTotalText } from '@/lib/orders';
+import { StatusBadge } from '@/components/status-badge';
 
 export const metadata = {
   title: 'Orders',
   description: 'View and manage orders',
 };
-
-function getStatusBadgeVariant(status: string) {
-  switch (status) {
-    case 'completed':
-      return 'default';
-    case 'pending':
-      return 'destructive';
-    default:
-      return 'secondary';
-  }
-}
 
 function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
   return (
@@ -60,9 +49,7 @@ function DataTable({ data }: { data: Awaited<ReturnType<typeof getOrders>> }) {
               {getOrderTotalText({ items: order.order_items })}
             </TableCell>
             <TableCell>
-              <Badge variant={getStatusBadgeVariant(order.status)}>
-                {order.status}
-              </Badge>
+              <StatusBadge status={order.status} />
             </TableCell>
             <TableCell>
               <Button variant="outline" size="sm" asChild>
