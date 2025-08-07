@@ -14,6 +14,16 @@ export async function getOrders() {
 export type OrderWithProfilesAndItems =
   ArrayElement<Awaited<ReturnType<typeof getOrders>>>;
 
+export async function getOrder(id: string) {
+  const supabase = await createClient();
+  const { data: order } = await supabase
+    .from('orders')
+    .select('*, profiles(first_name, last_name), order_items(id, product_id, quantity, products(*))')
+    .eq('id', id)
+    .single();
+  return order;
+}
+
 export async function countOrders(): Promise<number> {
   const supabase = await createClient();
   const { count } = await supabase.from('orders').select('*', { count: 'exact' });

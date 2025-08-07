@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { Product } from '@/entities/product';
-import { OrderItemPreview } from '@/entities/order';
+import { OrderItemPreview, type OrderItem } from '@/entities/order';
 
 export function getItemOrderSubtotal(
   { product, quantity }: { product: Product, quantity: number }) {
@@ -25,7 +25,7 @@ export function getOrderTotal(
 }
 
 export function getOrderTotalText(
-  { items, products = [] }: { items: OrderItemPreview[], products?: Product[] }
+  { items, products = [] }: { items: OrderItem[], products?: Product[] }
 ) {
   return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(getOrderTotal({ items, products }).toNumber());
 }
