@@ -18,6 +18,7 @@ import { getOrder } from '@/services/orders';
 import { getOrderTotalText } from '@/lib/orders';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { getFullName } from '@/services/customers';
 
 export const metadata = {
   title: 'Order Details',
@@ -47,6 +48,8 @@ export default async function OrderPage(
             {order.created_at
               ? new Date(order.created_at).toLocaleDateString()
               : 'N/A'}
+            {' '}
+            {order.profiles && `by ${getFullName(order.profiles)}`}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

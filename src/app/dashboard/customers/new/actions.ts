@@ -3,13 +3,13 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { schema, Customer } from '@/entities/customer';
+import { schema, CustomerValidator } from '@/entities/customer';
 
 type ActionState = {
   errors: Record<string, { message: string }>;
 };
 
-async function createCustomer(data: Customer): Promise<ActionState> {
+async function createCustomer(data: CustomerValidator): Promise<ActionState> {
   const { error: parseError } = schema.safeParse(data);
   const errors: ActionState['errors'] = {};
   for (const { path, message } of parseError?.issues || []) {

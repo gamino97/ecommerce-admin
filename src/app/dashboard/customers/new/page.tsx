@@ -7,11 +7,11 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { createCustomer } from './actions';
-import { Customer, schema } from '@/entities/customer';
+import { CustomerValidator, schema } from '@/entities/customer';
 import Link from 'next/link';
 
 export default function NewCustomerPage() {
-  const form = useForm<Customer>({
+  const form = useForm<CustomerValidator>({
     resolver: zodResolver(schema),
     defaultValues: {
       firstName: '',
@@ -23,12 +23,12 @@ export default function NewCustomerPage() {
     setError,
     formState: { isSubmitting },
   } = form;
-  const onSubmit: SubmitHandler<Customer> = async (data) => {
+  const onSubmit: SubmitHandler<CustomerValidator> = async (data) => {
     try {
       const { errors } = await createCustomer(data);
       if(errors) {
         Object.entries(errors).forEach(([key, value]) => {
-          setError(key as keyof Customer, { message: value.message });
+          setError(key as keyof CustomerValidator, { message: value.message });
         });
       }
     } catch (error) {

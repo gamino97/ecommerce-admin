@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { type Customer } from '@/entities/customer';
 
 export async function getCustomers() {
   const supabase = await createClient();
@@ -14,4 +15,8 @@ export async function getCustomers() {
     .overrideTypes<Array<{ id: string }>>();
   if (error) throw error;
   return data;
+}
+
+export function getFullName(user: Partial<Customer>){
+  return `${user.first_name || ''} ${user.last_name || ''}`;
 }
