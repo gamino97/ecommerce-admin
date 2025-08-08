@@ -65,6 +65,20 @@ export async function createOrder(order: OrderValidator) {
     shipping_address: 'Shipping Address',
   };
   const supabase = await createClient();
+  // Verify sufficient stock for all products in the order
+  const { data: products, error: productsError } = await supabase
+    .from('products')
+    .select('id, stock, name')
+    .in('id', order.items.map(item => item.product_id));
+  if (productsError) throw productsError;
+  const insufficientItem = order.items.find(item => {
+    const product = products?.find(p => p.id === item.product_id);
+    return !product || product.stock < item.quantity;
+  });
+  if (insufficientItem) {
+    const product = products?.find(p => p.id === insufficientItem.product_id);
+    throw new Error(`Insufficient stock for product ${product?.name}`);
+  }
   const { error, data: newOrder } = await supabase
     .from('orders')
     .insert(values)

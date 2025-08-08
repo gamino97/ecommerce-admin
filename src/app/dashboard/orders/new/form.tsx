@@ -35,6 +35,7 @@ import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
 import { getItemOrderSubtotal, getOrderTotalText } from '@/lib/orders';
+import { getErrorMessage } from '@/lib/utils';
 
 export default function NewOrderForm({
   customers,
@@ -70,7 +71,7 @@ export default function NewOrderForm({
         });
       }
     } catch (error) {
-      console.error(error);
+      setError('items', { message: getErrorMessage(error) });
     }
   };
   return (
