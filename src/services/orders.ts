@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { getOrderTotal } from '@/lib/orders';
 import Decimal from 'decimal.js';
 import { ArrayElement } from '@/entities';
+import { Order, orderStatuses } from '@/entities/order';
 
 const LOW_STOCK_THRESHOLD = 30;
 
@@ -55,4 +56,28 @@ export async function getCustomers(): Promise<number> {
   const supabase = await createClient();
   const { count } = await supabase.from('profiles').select('*', { count: 'exact' });
   return count || 0;
+}
+
+export async function createOrder(order: Order) {
+  const values = {
+    profiles_id: String(order.customerId || ''),
+    status: orderStatuses[0],
+    shipping_address: 'Shipping Address',
+  };
+  const supabase = await createClient();
+  const { error, data: newOrder } = await supabase
+    .from('orders')
+    .insert(values)
+    .select()
+    .single();
+  if(error) throw error;
+  const { error: insertError } = await supabase
+    .from('order_items')
+    .insert(
+      order.items.map(item => ({
+        order_id: newOrder.id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+      })));
+  if(insertError) throw insertError;
 }

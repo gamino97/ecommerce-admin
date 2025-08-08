@@ -30,7 +30,7 @@ import {
   defaultOrderValues,
 } from '@/entities/order';
 import { Product } from '@/entities/product';
-import { createOrder } from './actions';
+import { createOrderAction } from './actions';
 import Link from 'next/link';
 import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
@@ -59,7 +59,7 @@ export default function NewOrderForm({
   });
   const onSubmit: SubmitHandler<Order> = async (data) => {
     try {
-      const result = await createOrder(data);
+      const result = await createOrderAction(data);
       if (result?.errors) {
         Object.entries(result.errors).forEach(([key, value]) => {
           if (value && typeof value === 'object' && 'message' in value) {
