@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import './globals.css';
+import { cn } from '@/lib/utils';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,7 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
+        className={cn(
+          geistSans.variable,
+          geistMono.variable,
+          'antialiased bg-background'
+        )}
       >
         <ThemeProvider attribute="class" defaultTheme='system' enableSystem disableTransitionOnChange>
           {children}

@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  Order,
+  OrderValidator,
   orderSchema,
   defaultOrderValues,
 } from '@/entities/order';
@@ -43,7 +43,7 @@ export default function NewOrderForm({
   customers: Awaited<ReturnType<typeof getCustomers>>;
   products: Awaited<ReturnType<typeof getProducts>>;
 }) {
-  const form = useForm<Order>({
+  const form = useForm<OrderValidator>({
     resolver: zodResolver(orderSchema),
     defaultValues: defaultOrderValues,
   });
@@ -57,13 +57,13 @@ export default function NewOrderForm({
     control,
     name: 'items',
   });
-  const onSubmit: SubmitHandler<Order> = async (data) => {
+  const onSubmit: SubmitHandler<OrderValidator> = async (data) => {
     try {
       const result = await createOrderAction(data);
       if (result?.errors) {
         Object.entries(result.errors).forEach(([key, value]) => {
           if (value && typeof value === 'object' && 'message' in value) {
-            setError(key as keyof Order, {
+            setError(key as keyof OrderValidator, {
               message: String(value.message),
             });
           }
@@ -154,7 +154,7 @@ export default function NewOrderForm({
                         <FormControl>
                           <Input
                             type="number"
-                            placeholder="Qty"
+                            placeholder="Quantity"
                             {...field}
                             onChange={(event) => field.onChange(
                               event.target.valueAsNumber
@@ -228,7 +228,7 @@ function PriceField({
   index,
   products,
 }: {
-  control: Control<Order>;
+  control: Control<OrderValidator>;
   index: number;
   products: Awaited<ReturnType<typeof getProducts>>;
 }) {
@@ -270,7 +270,7 @@ function PriceField({
 function OrderTotal(
   { products }:{ products: Awaited<ReturnType<typeof getProducts>> }
 ) {
-  const items = useWatch({ name: 'items' }) as Order['items'];
+  const items = useWatch({ name: 'items' }) as OrderValidator['items'];
   // Calculate order total
   const orderTotalText = useMemo(
     () => getOrderTotalText({ items, products }),

@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { getOrderTotal } from '@/lib/orders';
 import Decimal from 'decimal.js';
 import { ArrayElement } from '@/entities';
-import { Order, orderStatuses } from '@/entities/order';
+import { OrderValidator, orderStatuses } from '@/entities/order';
 
 const LOW_STOCK_THRESHOLD = 30;
 
@@ -58,7 +58,7 @@ export async function getCustomers(): Promise<number> {
   return count || 0;
 }
 
-export async function createOrder(order: Order) {
+export async function createOrder(order: OrderValidator) {
   const values = {
     profiles_id: String(order.customerId || ''),
     status: orderStatuses[0],

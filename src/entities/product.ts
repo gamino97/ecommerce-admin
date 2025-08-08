@@ -5,8 +5,8 @@ export const productSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   description: z.string().optional(),
   image_url: z.url({ message: 'Image URL must be valid' }).optional(),
-  price: z.number().positive({ message: 'Price must be positive' }),
-  stock: z.number().int().nonnegative({ message: 'Stock must be 0 or more' }),
+  price: z.number({ message: 'Price is required' }).positive({ message: 'Price must be positive' }),
+  stock: z.number({ message: 'Stock is required' }).int().nonnegative({ message: 'Stock must be 0 or more' }),
   category_id: z.string({ message: 'Category is required' }),
 });
 

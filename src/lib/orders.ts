@@ -27,5 +27,7 @@ export function getOrderTotal(
 export function getOrderTotalText(
   { items, products = [] }: { items: OrderItem[], products?: Product[] }
 ) {
-  return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(getOrderTotal({ items, products }).toNumber());
+  let orderTotal = getOrderTotal({ items, products });
+  if (orderTotal.isNaN()) orderTotal = Decimal(0);
+  return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(orderTotal.toNumber());
 }

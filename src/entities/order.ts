@@ -12,25 +12,25 @@ export type OrderStatus = typeof orderStatuses[number];
 
 export const orderItemSchema = z.object({
   id: z.string().optional(),
-  product_id: z.string().min(1, 'Product is required'),
-  quantity: z.number().int().positive('Quantity must be at least 1'),
+  product_id: z.string({ message: 'Product is required' }),
+  quantity: z.number({ message: 'Quantity is required' }).int().positive({ message: 'Quantity must be at least 1' }),
 });
 
 export type OrderItem = z.infer<typeof orderItemSchema>;
 
 export const orderSchema = z.object({
-  customerId: z.string({ error: 'Customer is required' }),
+  customerId: z.string({ message: 'Customer is required' }),
   status: z.enum(orderStatuses, {
-    error: 'Status is required',
+    message: 'Status is required',
   }),
   items: z
     .array(orderItemSchema)
     .min(1, 'At least one item is required'),
 });
 
-export type Order = z.infer<typeof orderSchema>;
+export type OrderValidator = z.infer<typeof orderSchema>;
 
-export const defaultOrderValues: Partial<Order> = {
+export const defaultOrderValues: Partial<OrderValidator> = {
   status: 'pending',
   items: [],
 };

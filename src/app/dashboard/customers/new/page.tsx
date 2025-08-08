@@ -52,7 +52,7 @@ export default function NewCustomerPage() {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter your first name" {...field} />
+                      <Input type="text" placeholder="Enter customer first name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -65,7 +65,7 @@ export default function NewCustomerPage() {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter your last name" {...field} />
+                      <Input type="text" placeholder="Enter customer last name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
