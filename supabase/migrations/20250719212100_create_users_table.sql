@@ -40,11 +40,11 @@ create table categories (
 create table products (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  description text,
-  image_url text,
+  description text not null,
+  image_url text not null,
   price numeric(10,2) not null,
   stock integer not null default 0,
-  category_id uuid references categories(id),
+  category_id uuid not null references categories(id),
   created_at timestamp with time zone default timezone('utc', now())
 );
 
@@ -75,3 +75,20 @@ join public.profiles p on u.id = p.id;
 
 -- Add a comment to document the view
 comment on view public.users_with_orders is 'Users who have placed at least one order';
+
+-- FUNCTION: decrement_stock_for_order
+create or replace function public.decrement_stock_for_order(p_order_id uuid)
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  update products
+  set stock = stock - oi.quantity
+  from order_items oi
+  where products.id = oi.product_id
+    and oi.order_id = p_order_id;
+end;
+$$;
+
+grant execute on function public.decrement_stock_for_order(uuid) to authenticated, anon;

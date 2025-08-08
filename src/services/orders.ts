@@ -80,4 +80,9 @@ export async function createOrder(order: Order) {
         quantity: item.quantity,
       })));
   if(insertError) throw insertError;
+  // Decrement stock for all products in the order
+  const { error: stockError } = await supabase.rpc('decrement_stock_for_order', {
+    p_order_id: newOrder.id,
+  });
+  if (stockError) throw stockError;
 }
