@@ -20,7 +20,7 @@ const eslintConfig = [
     rules: {
       '@stylistic/indent': ['error', 2],
       '@stylistic/no-tabs': ['error'],
-      '@stylistic/max-len': ['error', { 'code': 80, 'ignoreStrings': true, 'tabWidth': 2 }],
+      '@stylistic/max-len': ['error', { 'code': 80, 'ignoreStrings': true, 'tabWidth': 2, 'ignoreComments': true }],
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/eol-last': ['error', 'always'],
       '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
