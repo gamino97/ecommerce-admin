@@ -36,6 +36,12 @@ create table categories (
   name text not null unique
 );
 
+alter table public.categories enable row level security;
+create policy "Public categories are viewable only by authenticated users"
+on public.categories for all
+to authenticated
+using ( true );
+
 -- PRODUCTS TABLE
 create table products (
   id uuid primary key default gen_random_uuid(),
@@ -48,6 +54,12 @@ create table products (
   created_at timestamp with time zone default timezone('utc', now())
 );
 
+alter table public.products enable row level security;
+create policy "Public products are viewable only by authenticated users"
+on public.products for all
+to authenticated
+using ( true );
+
 -- ORDERS TABLE
 create table orders (
   id uuid primary key default gen_random_uuid(),
@@ -58,6 +70,12 @@ create table orders (
   created_at timestamp with time zone default timezone('utc', now())
 );
 
+alter table public.orders enable row level security;
+create policy "Public orders are viewable only by authenticated users"
+on public.orders for all
+to authenticated
+using ( true );
+
 -- ORDER ITEMS TABLE
 create table order_items (
   id uuid primary key default gen_random_uuid(),
@@ -66,6 +84,11 @@ create table order_items (
   quantity integer not null,
 );
 
+alter table public.order_items enable row level security;
+create policy "Public order items are viewable only by authenticated users"
+on public.order_items for all
+to authenticated
+using ( true );
 
 -- Create a view to show users who have placed at least one order
 create or replace view public.users_with_orders as

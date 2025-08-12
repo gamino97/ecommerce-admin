@@ -12,7 +12,7 @@ export type OrderStatus = typeof orderStatuses[number];
 
 export const orderItemSchema = z.object({
   id: z.string().optional(),
-  product_id: z.string({ message: 'Product is required' }),
+  product_id: z.uuid({ message: 'Product is required' }),
   quantity: z.number({ message: 'Quantity is required' }).int().positive({ message: 'Quantity must be at least 1' }),
 });
 
