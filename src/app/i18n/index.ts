@@ -16,7 +16,7 @@ export async function getT(
   }
   return {
     t: i18next.getFixedT(
-      lng || i18next.resolvedLanguage,
+      lng || i18next.resolvedLanguage || fallbackLng,
       Array.isArray(ns) ? ns[0] : ns,
       options?.keyPrefix
     ),
