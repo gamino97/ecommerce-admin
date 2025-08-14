@@ -44,6 +44,7 @@ function DataTable({ data }: DataTableProps) {
                 alt={product.name}
                 width={44}
                 height={44}
+                unoptimized
               />
             </TableCell>
             <TableCell className="font-medium">{product.name}</TableCell>

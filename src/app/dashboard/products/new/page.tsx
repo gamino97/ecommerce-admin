@@ -7,6 +7,11 @@ import {
 import { getCategories } from '@/services/categories';
 import NewProductForm from './form';
 
+export const metadata = {
+  title: 'Create Product',
+  description: 'Add a new product',
+};
+
 export default async function NewProductPage() {
   const categories = await getCategories();
   return (
