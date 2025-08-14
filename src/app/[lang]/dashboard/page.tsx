@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, ShoppingCart, Users, AlertTriangle, LucideIcon } from 'lucide-react';
 import { getTotalSalesPrice, countOrders, getCustomers, getLowStockItems } from '@/services/orders';
 import type { Metadata } from 'next';
+import { getT } from '@/app/i18n';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -58,6 +59,7 @@ const DashboardHeader = ({ title }: { title: string }) => (
 );
 
 export default async function DashboardPage() {
+  const { t } = await getT('dashboard');
   const metrics = {
     totalSales: await getTotalSalesPrice(),
     totalOrders: await countOrders(),
@@ -66,7 +68,7 @@ export default async function DashboardPage() {
   };
   return (
     <div className="w-full space-y-4 p-4 md:p-8 pt-6">
-      <DashboardHeader title="Dashboard" />
+      <DashboardHeader title={t('dashboard.title')} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           title="Total Sales"
