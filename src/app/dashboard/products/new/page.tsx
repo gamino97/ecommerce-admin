@@ -1,0 +1,25 @@
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { getCategories } from '@/services/categories';
+import NewProductForm from './form';
+
+export default async function NewProductPage() {
+  const categories = await getCategories();
+  return (
+    <div className="container mx-auto py-10">
+      <Card className="max-w-3xl mx-auto">
+        <CardHeader>
+          <CardTitle>Create Product</CardTitle>
+          <CardDescription>
+            Fill out the form to add a new product.
+          </CardDescription>
+        </CardHeader>
+        <NewProductForm categories={categories} />
+      </Card>
+    </div>
+  );
+}

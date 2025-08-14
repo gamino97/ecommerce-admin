@@ -1,0 +1,288 @@
+'use client';
+import { useMemo } from 'react';
+import { Control, useWatch } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
+import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  OrderValidator,
+  orderSchema,
+  defaultOrderValues,
+} from '@/entities/order';
+import { Product } from '@/entities/product';
+import { createOrderAction } from './actions';
+import Link from 'next/link';
+import { getCustomers } from '@/services/customers';
+import { getProducts } from '@/services/products';
+import { getItemOrderSubtotal, getOrderTotalText } from '@/lib/orders';
+import { getErrorMessage } from '@/lib/utils';
+
+export default function NewOrderForm({
+  customers,
+  products,
+}: {
+  customers: Awaited<ReturnType<typeof getCustomers>>;
+  products: Awaited<ReturnType<typeof getProducts>>;
+}) {
+  const form = useForm<OrderValidator>({
+    resolver: zodResolver(orderSchema),
+    defaultValues: defaultOrderValues,
+  });
+  const {
+    handleSubmit,
+    control,
+    setError,
+    formState: { isSubmitting },
+  } = form;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'items',
+  });
+  const onSubmit: SubmitHandler<OrderValidator> = async (data) => {
+    try {
+      const result = await createOrderAction(data);
+      if (result?.errors) {
+        Object.entries(result.errors).forEach(([key, value]) => {
+          if (value && typeof value === 'object' && 'message' in value) {
+            setError(key as keyof OrderValidator, {
+              message: String(value.message),
+            });
+          }
+        });
+      }
+    } catch (error) {
+      setError('items', { message: getErrorMessage(error) });
+    }
+  };
+  return (
+    <Form {...form}>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <CardContent className="space-y-6">
+          <FormField
+            control={control}
+            name="customerId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Customer</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a customer" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {customers.map(
+                      (customer) => (
+                        <SelectItem
+                          key={customer.id}
+                          value={customer.id}
+                        >
+                          {customer.first_name} {customer.last_name}
+                        </SelectItem>
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div>
+            <h3 className="text-lg font-medium">Order Items</h3>
+            <div className="space-y-4 mt-2">
+              {fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="flex items-center space-x-4 p-4 border rounded-lg"
+                >
+                  <FormField
+                    control={control}
+                    name={`items.${index}.product_id`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a product" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {products.map((product: Product) => (
+                              <SelectItem
+                                key={product.id}
+                                value={product.id}
+                              >
+                                {product.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name={`items.${index}.quantity`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Quantity"
+                            {...field}
+                            onChange={(event) => field.onChange(
+                              event.target.valueAsNumber
+                            )}
+                            min={1}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <PriceField
+                    control={control}
+                    index={index}
+                    products={products}
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => remove(index)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <FormField
+              control={control}
+              name="items"
+              render={() => (
+                <FormMessage className='mt-2' />
+              )}
+            />
+            <div className="flex justify-between items-start mt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  append({
+                    product_id: '',
+                    quantity: 1,
+                  })
+                }
+              >
+                Add Item
+              </Button>
+              <OrderTotal products={products}/>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between items-end">
+          <Button
+            type="button"
+            variant="outline"
+            asChild
+            disabled={isSubmitting}
+          >
+            <Link href="/dashboard/orders">Cancel</Link>
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create Order'}
+          </Button>
+        </CardFooter>
+      </form>
+    </Form>
+  );
+}
+
+function PriceField({
+  control,
+  index,
+  products,
+}: {
+  control: Control<OrderValidator>;
+  index: number;
+  products: Awaited<ReturnType<typeof getProducts>>;
+}) {
+  const selectedProductId = useWatch({
+    control,
+    name: `items.${index}.product_id`,
+  });
+  const selectedQuantity = useWatch({
+    control,
+    name: `items.${index}.quantity`,
+  });
+  const selectedProduct = products.find(p => p.id === selectedProductId);
+  const price = selectedProduct ? getItemOrderSubtotal({
+    product: selectedProduct,
+    quantity: selectedQuantity
+  }).toNumber() : '';
+
+  return (
+    <FormItem>
+      <FormControl>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <span className="text-muted-foreground">$</span>
+          </div>
+          <Input
+            type="number"
+            placeholder="Price"
+            value={price}
+            readOnly
+            className="bg-muted pl-7"
+          />
+        </div>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+}
+
+function OrderTotal(
+  { products }:{ products: Awaited<ReturnType<typeof getProducts>> }
+) {
+  const items = useWatch({ name: 'items' }) as OrderValidator['items'];
+  // Calculate order total
+  const orderTotalText = useMemo(
+    () => getOrderTotalText({ items, products }),
+    [items, products]
+  );
+  return (
+    <div className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
+      <span className="font-medium mr-[1ch]">Order Total:</span>
+      <span className="text-lg font-semibold">
+        {orderTotalText}
+      </span>
+    </div>
+  );
+}
