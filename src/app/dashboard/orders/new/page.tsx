@@ -8,6 +8,11 @@ import { getCustomers } from '@/services/customers';
 import { getProducts } from '@/services/products';
 import NewOrderForm from './form';
 
+export const metadata = {
+  title: 'Create Order',
+  description: 'Add a new order',
+};
+
 export default async function NewOrderPage() {
   const customers = await getCustomers();
   const products = await getProducts();

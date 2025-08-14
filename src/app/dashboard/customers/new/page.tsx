@@ -10,6 +10,11 @@ import { createCustomer } from './actions';
 import { CustomerValidator, schema } from '@/entities/customer';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Create Customer',
+  description: 'Add a new customer',
+};
+
 export default function NewCustomerPage() {
   const form = useForm<CustomerValidator>({
     resolver: zodResolver(schema),
