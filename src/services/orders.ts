@@ -17,12 +17,12 @@ export type OrderWithProfilesAndItems =
 
 export async function getOrder(id: string) {
   const supabase = await createClient();
-  const { data: order } = await supabase
+  const { data } = await supabase
     .from('orders')
     .select('*, profiles(first_name, last_name), order_items(id, product_id, quantity, products(*))')
     .eq('id', id)
     .single();
-  return order;
+  return data;
 }
 
 export async function countOrders(): Promise<number> {

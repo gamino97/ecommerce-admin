@@ -9,7 +9,7 @@ export async function login(formData: LoginFormValues) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword(formData);
   if (error) {
-    redirect('/error');
+    return { error: error.message };
   }
   revalidatePath('/dashboard', 'layout');
   redirect('/dashboard');
