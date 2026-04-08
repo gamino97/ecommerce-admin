@@ -20,12 +20,20 @@ export default function LoginForm() {
     handleSubmit,
     formState: { isSubmitting },
   } = form;
-  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-    await login(data);
+  const on_submit: SubmitHandler<LoginFormValues> = async (data) => {
+    const login_result = await login(data);
+    if (login_result?.error) {
+      form.setError('root', { message: login_result.error });
+    }
   };
   return (
     <Form {...form}>
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-4" onSubmit={handleSubmit(on_submit)}>
+        {form.formState.errors.root && (
+          <div className="text-sm font-medium text-destructive">
+            {form.formState.errors.root.message}
+          </div>
+        )}
         <FormField
           control={form.control}
           name="email"
