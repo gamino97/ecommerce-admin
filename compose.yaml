@@ -1,0 +1,33 @@
+services:
+  # Node.js service (use with: docker compose up nextjs-standalone --build)
+  ecommerce-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    restart: unless-stopped
+    secrets:
+      - SUPABASE_URL
+      - SUPABASE_PUBLISHABLE_KEY
+    networks:
+      - nginx_default
+    volumes:
+      - nginx_ecommerce_admin_volume:/app/.next/static
+
+secrets:
+  SUPABASE_URL:
+    file: ./.secrets/SUPABASE_URL.txt
+  SUPABASE_PUBLISHABLE_KEY:
+    file: ./.secrets/SUPABASE_PUBLISHABLE_KEY.txt
+  SUPABASE_ID:
+    file: ./.secrets/SUPABASE_ID.txt
+
+networks:
+  nginx_default:
+    external: true
+
+volumes:
+  nginx_ecommerce_admin_volume:
+    external: true
