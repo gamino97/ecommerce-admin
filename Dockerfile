@@ -34,7 +34,8 @@ RUN pnpm run build
 # Stage 3: Run Next.js application
 # ============================================
 
-FROM base
+FROM node:24.13.0-alpine
+WORKDIR /app
 
 # Set production environment variables
 ENV NODE_ENV=production

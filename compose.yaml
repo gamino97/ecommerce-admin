@@ -1,9 +1,7 @@
 services:
   # Node.js service (use with: docker compose up nextjs-standalone --build)
   ecommerce-admin:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ecommerce-admin
     environment:
       NODE_ENV: production
       PORT: "3000"

@@ -134,3 +134,5 @@ AGENTS.md
 *.anthropic*
 
 .secrets/
+deploy.sh
+*.tar.gz
