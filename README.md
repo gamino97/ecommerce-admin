@@ -77,3 +77,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Deployment
 
 This project is ready to be deployed on platforms like [Vercel](https://vercel.com/) or [Railway](https://railway.app/).
+
+### Self-hosted deployment
+
+A simple deployment helper script is included for deploying the Docker image to a VPS without using a registry:
+
+```bash
+VPS_HOST=203.0.113.10 VPS_USER=root SSH_KEY=/path/to/id_rsa ./deploy.sh
+```
+
+The script will:
+
+- Build the Docker image locally.
+- Export the image to a compressed tarball.
+- Transfer the tarball to the remote host via `scp`.
+- Load the image on the VPS and restart the service with `docker compose`.
+- Clean up temporary tarball files locally and remotely.
+
+If you use the script, make sure the target server has `docker`, `docker compose`, `ssh`, and `scp` installed.
